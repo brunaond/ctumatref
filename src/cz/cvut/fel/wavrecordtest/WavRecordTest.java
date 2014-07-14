@@ -177,6 +177,8 @@ public class WavRecordTest extends Activity {
 		Log.d("PLR", "Burst region extracted...");
 		indices = simpleMath.getBurstIndices(plotData); // returns burst indices from the data without noise
 		Log.d("PLR", "Fake correlation calculated...");
+		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
+		bursts.setText("#Bursts: "+ indices.length);
 		for (int d : indices) {
 			burstData = simpleMath.getSubsequent(d-100, d+400, plotData);
 			drawPlotClean(burstData);

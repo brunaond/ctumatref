@@ -33,6 +33,14 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:hint="@string/status_view" />
+
+	    <TextView
+	        android:id="@+id/busrsts_detected_text_view"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/nburst"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
      </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent"
