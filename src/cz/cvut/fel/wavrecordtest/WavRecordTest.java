@@ -567,12 +567,12 @@ public class WavRecordTest extends Activity {
 		}	
 				
 
-@Override
-protected void onResume() {
-	// TODO Auto-generated method stub
-	super.onResume();
-	//plotData();
-}		
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//plotData();
+	}		
 
 
 	@Override
