@@ -10,6 +10,7 @@ public class Signal {
 	private double mean;
 	private double variance;
 	
+	
 	public Signal() {
 		// TODO Auto-generated constructor stub
 		length = 0;
@@ -23,7 +24,7 @@ public class Signal {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static double[] correlation(short[] data_in) {
+	public static double[] autoCorrelation(short[] data_in) {
 		  int length;
 		  length = data_in.length;
 		  double[] data = null;
@@ -60,27 +61,22 @@ public class Signal {
 	}
 	
 	/**Calculates the mean value of the signal and saves it in the class variable.*/
-	public void calculateMean() {
-		double mean = 0;
-		for (short s : inData) {
+	public void calculateMean() {		
+		for (short s : data) {
 			mean += s;
 		}
-		mean /= inData.length;
-		return mean;
+		mean /= data.length;		
 	} // Calculate mean
 	
 	/** Calculates the standard deviation of the data.*/
-	public void calcStd() {
-		double std = 0;
-		double mean = 0;
-		mean = getMean(inData);
+	public void calculateStd() {
+		double std = 0;				
 		
-		for (short s : inData) {
+		for (short s : data) {
 			std += ((s-mean)*(s-mean));
 		}		
-		std /= (inData.length-1);
-		std = Math.sqrt(std);
-		return std;
+		std /= (data.length-1);
+		variance = Math.sqrt(std);		
 	} // calcStd
 	
 	public double getMean(){
