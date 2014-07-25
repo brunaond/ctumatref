@@ -5,6 +5,8 @@ import java.util.List;
 import android.net.Uri;
 import android.util.Log;
 
+// Energy calculation of reflected wave:
+// energy(k,2) = (energy(k,1)*4*pi*D_mic_loudspeaker^2)/(4*pi*((D_mic_loudspeaker + 2*(D_mic_table-Thickness_sample)))^2);
 
 public class simpleMath{		
 	public static double[] correlation(short[] data_in) {
@@ -449,6 +451,8 @@ public class simpleMath{
 			temp[i] = indices[i];
 		}
 		return temp;		
-	}	
+	}
+	
+	
 
 }
