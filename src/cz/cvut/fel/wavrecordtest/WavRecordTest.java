@@ -127,7 +127,7 @@ public class WavRecordTest extends Activity {
 		TextView mText = (TextView) findViewById(R.id.status_text_view);
 				
 		if (filePath==null){ 			
-			mText.setText("No file recorded yet.");
+			mText.setText("No file recorded yet");
 			Log.d("PLR", "No file recorded yet");
 			return;		
 		}
@@ -166,28 +166,29 @@ public class WavRecordTest extends Activity {
 		// The noise is recognized to be between following indices: 4300 and 22100
 		//plotData = simpleMath.getSubsequent(4300, 22100, plotData);
 		//plotData = simpleMath.xGetNoise(plotData);
-		//plotData = simpleMath.getNoise(noiseData, plotData);
-		//Log.d("PLR", "Noise extracted successfully.");
+		plotData = simpleMath.getNoise(noiseData, plotData);
+		Log.d("PLR", "Noise extracted successfully.");
 		//plotData = simpleMath.getBurst(noiseData, plotData);
 		//drawPlot(plotData);
 		//Log.d("PLR","Data plotted.");
 		
 		// Detecting the regions with bursts - there should be no more than eight bursts.
-		plotData = simpleMath.getBurstRegion(noiseData, plotData);
-		Log.d("PLR", "Burst region extracted...");
+		//plotData = simpleMath.getBurstRegion(noiseData, plotData);
+		//Log.d("PLR", "Burst region extracted...");
 		indices = simpleMath.getBurstIndices(plotData); // returns burst indices from the data without noise
-		Log.d("PLR", "Fake correlation calculated...");
+		Log.d("PLR", "Burst indices obtained.");
 		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
 		bursts.setText("#Bursts: "+ indices.length);
-		for (int d : indices) {
+/*		
+ 		for (int d : indices) {
 			burstData = simpleMath.getSubsequent(d-100, d+400, plotData);
 			drawPlotClean(burstData);
 			Log.d("PLR", "Plot done.");			
 		}
-		
+*/
 
 		
-		/*
+		
 		data_corr = new double[2*plotData.length];
 		data_corr = simpleMath.correlation_fast(plotData);
 		Log.d("PLR", "Correlation computed.");
@@ -195,16 +196,16 @@ public class WavRecordTest extends Activity {
 		data_corr = simpleMath.abs(data_corr);		
 		Log.d("PLR", "Abs computed.");
 		data_corr_butter = simpleMath.butterworth(data_corr);
-		Log.d("PLR", "Filter applied.");*/
+		Log.d("PLR", "Filter applied.");
 		//drawPlot(data_corr_butter);
 		//Log.d("PLR", "Data plotted.");
 		
-		//peak = simpleMath.localMax(data_corr_butter);
-		//data_sub = simpleMath.getSubsequent(peak+50, peak+140, data_corr_butter);		
-		//maximum = simpleMath.localMax(data_sub);
-		//time = (double)(maximum+50)/44100;
-		//distance = (time*340/2)*100;
-		//viz();
+		peak = simpleMath.localMax(data_corr_butter);
+		data_sub = simpleMath.getSubsequent(peak+50, peak+140, data_corr_butter);		
+		maximum = simpleMath.localMax(data_sub);
+		time = (double)(maximum+50)/44100;
+		distance = (time*340/2)*100;
+		viz();
 	}	
 	
 	private void viz(){
