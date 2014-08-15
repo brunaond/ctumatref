@@ -1,8 +1,10 @@
 package cz.cvut.fel.wavrecordtest;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -205,8 +207,27 @@ public class WavRecordTest extends Activity {
 		maximum = simpleMath.localMax(data_sub);
 		time = (double)(maximum+50)/44100;
 		distance = (time*340/2)*100;
+		
 		viz();
 	}	
+	
+	void writeLog(int bursts){
+		String fileLog;
+		File outFile;
+		FileWriter writer;
+		fileLog = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+        fileLog += "/rec_"+y+"-"+m+"-"+d+"-"+h+min+sec+".log";		
+        try {
+            outFile = new File(fileLog);
+            writer = new FileWriter(outFile);
+    		writer.write("Distance:" + Double.toString(distance) + "\n");
+    		writer.write("Bursts detected:" + Integer.toString(bursts) + "\n");
+    		writer.close();        	
+        } catch (IOException ex) {
+        	ex.printStackTrace();
+        }
+	}
+	
 	
 	private void viz(){
 		TextView mText = (TextView) findViewById(R.id.status_text_view);
@@ -223,7 +244,6 @@ public class WavRecordTest extends Activity {
 	        sData[i] = 0;
 	    }
 	    return bytes;
-
 	}
 
 	private short[] byte2short(byte[] bData) {
