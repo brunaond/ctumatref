@@ -8,7 +8,9 @@ import android.util.Log;
 // Energy calculation of reflected wave:
 // energy(k,2) = (energy(k,1)*4*pi*D_mic_loudspeaker^2)/(4*pi*((D_mic_loudspeaker + 2*(D_mic_table-Thickness_sample)))^2);
 
-public class simpleMath{		
+public class simpleMath{
+	final static double PI = 3.14;
+	
 	public static double[] correlation(short[] data_in) {
 		  int length;
 		  length = data_in.length;
@@ -43,6 +45,18 @@ public class simpleMath{
 		    R = 0;
 		  }						
 		return corr;
+	}
+	
+	public static double calcImpedance(short[] inBurst, double D_mic_loudspeaker, double D_mic_table, double Thickness_sample){
+		double impedance;
+		double energyIncident;
+		double energyIncidentCalculated;
+		double energyReflected;
+		energyIncident = getEnergy(getSubsequent(90, 190, inBurst));
+		energyReflected = getEnergy(getSubsequent(300, 400, inBurst));
+		energyIncidentCalculated = (energyIncident*4*PI*(Math.pow(D_mic_loudspeaker,2)))/(4*PI*Math.pow((D_mic_loudspeaker + 2*(D_mic_table-Thickness_sample)),2));
+		impedance = energyIncidentCalculated/energyReflected;
+		return impedance;
 	}
 	
 	// This is not full x-correlation.

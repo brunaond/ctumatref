@@ -51,9 +51,11 @@ public class WavRecordTest extends Activity {
 	private boolean isRecording = false;
 	int BufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
 	int BytesPerElement = 2; // 2 bytes in 16bit format
-	private static String filePath = null;	
+	private static String filePath = null;
+	private static String file_wav = null;
 	private Calendar cal;
 	double[] data_sub = null;
+	double[] impedance = null;
 	//short[] data_sub = null;
 	double distance;
 	
@@ -181,13 +183,17 @@ public class WavRecordTest extends Activity {
 		Log.d("PLR", "Burst indices obtained.");
 		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
 		bursts.setText("#Bursts: "+ indices.length);
-/*		
- 		for (int d : indices) {
+		impedance = new double[indices.length];
+		int i = 0;
+		
+ 		for (int d : indices) { 			
 			burstData = simpleMath.getSubsequent(d-100, d+400, plotData);
-			drawPlotClean(burstData);
-			Log.d("PLR", "Plot done.");			
+			//drawPlotClean(burstData);
+			impedance[i] = simpleMath.calcImpedance(burstData, 0.0, distance, 0.0 );
+			Log.d("PLR", "Plot done.");
+			i++;
 		}
-*/
+
 
 		
 		
@@ -209,20 +215,26 @@ public class WavRecordTest extends Activity {
 		distance = (time*340/2)*100;
 		
 		viz();
+		writeLog(indices.length);
 	}	
 	
-	void writeLog(int bursts){
-		String fileLog;
+	private void writeLog(int bursts){
+		String fileLog = null;
 		File outFile;
-		FileWriter writer;
-		fileLog = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
-        fileLog += "/rec_"+y+"-"+m+"-"+d+"-"+h+min+sec+".log";		
+		FileWriter writer;		
+		fileLog += file_wav.replace(".wav", ".log");
+        	
         try {
             outFile = new File(fileLog);
             writer = new FileWriter(outFile);
     		writer.write("Distance:" + Double.toString(distance) + "\n");
     		writer.write("Bursts detected:" + Integer.toString(bursts) + "\n");
-    		writer.close();        	
+    		
+    		for (int i = 0; i < impedance.length; i++) {
+				writer.write("Impedance calculated:" + Double.toString(impedance[i]) + "\n");
+			}    		
+    		
+    		writer.close();        	    		
         } catch (IOException ex) {
         	ex.printStackTrace();
         }
@@ -278,7 +290,6 @@ public class WavRecordTest extends Activity {
 		int m = cal.get(Calendar.MONTH)+1; // Months are counted from 0 = January.
 		int y = cal.get(Calendar.YEAR);
 		byte[] header=null;
-		String file_wav;
 		Long length;
 		byte[] buffer;
 		
