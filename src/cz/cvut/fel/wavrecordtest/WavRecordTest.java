@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.Calendar;
@@ -220,13 +221,19 @@ public class WavRecordTest extends Activity {
 	
 	private void writeLog(int bursts){
 		String fileLog = null;
-		File outFile;
-		FileWriter writer;		
-		fileLog += file_wav.replace(".wav", ".log");
+		//fileLog = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+		if (file_wav == null){
+			return;
+		}
+		fileLog = file_wav;
+		fileLog += ".log";
+		FileOutputStream os;
+		PrintWriter writer;
+		
         	
-        try {
-            outFile = new File(fileLog);
-            writer = new FileWriter(outFile);
+        try {            
+			os = new FileOutputStream(fileLog);
+			writer = new PrintWriter(os);            
     		writer.write("Distance:" + Double.toString(distance) + "\n");
     		writer.write("Bursts detected:" + Integer.toString(bursts) + "\n");
     		
@@ -555,6 +562,10 @@ public class WavRecordTest extends Activity {
         plot.redraw();
 		
 	}		
+	
+	public void writeTest(){
+		
+	}
 
 
 		@Override
@@ -567,7 +578,8 @@ public class WavRecordTest extends Activity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					startPlaying();
+					// startPlaying();
+					writeLog(5);
 				}
 			});
 						
