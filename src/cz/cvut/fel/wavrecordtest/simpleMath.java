@@ -2,6 +2,8 @@ package cz.cvut.fel.wavrecordtest;
 
 import java.util.List;
 
+import javax.xml.transform.Templates;
+
 import android.net.Uri;
 import android.util.Log;
 
@@ -57,6 +59,35 @@ public class simpleMath{
 		energyIncidentCalculated = (energyIncident*4*PI*(Math.pow(D_mic_loudspeaker,2)))/(4*PI*Math.pow((D_mic_loudspeaker + 2*(D_mic_table-Thickness_sample)),2));
 		impedance = energyIncidentCalculated/energyReflected;
 		return impedance;
+	}
+	
+	public static double calcFrequency(short[] inBurst){
+		double freq;
+		int[] indices = new int[inBurst.length];
+		int k =0;
+		int[] temp, tempDiff;
+		int max;
+		
+		for (int i = 1; i < inBurst.length; i++) {
+			if ((inBurst[i] > 0) && (inBurst[i-1]) < 0) {
+				indices[k] = i;
+				k++;
+			} else if ((inBurst[i] < 0) && (inBurst[i-1] > 0)) {
+				indices[k] = i;
+				k++;
+			}
+		}
+
+		temp = new int[k];
+		tempDiff = new int[k];
+		for (int i = 0; i < k; i++) {
+			temp[i] = indices[i];
+		}
+		
+		tempDiff = diff(temp);
+		max = localMax(tempDiff);
+		freq = 44100/tempDiff[max];
+		return freq;
 	}
 	
 	// This is not full x-correlation.
@@ -240,8 +271,32 @@ public class simpleMath{
 	return x_diff;
   }
   
+  public static int[] diff(int[] x){
+	    int[] x_diff;
+	    x_diff = new int[x.length-1];
+		  for(int i = 1;i<x.length; i++){
+	      x_diff[i-1] = x[i] - x[i-1];
+	    }
+		return x_diff;
+  }
+  
 	public static int localMax(double[] data){
 		double max;
+		int index;
+		
+		max = data[0];
+		index = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (max<data[i]) {
+				max = data[i];
+				index = i;
+			} 
+		}
+		return index;
+	}
+	
+	public static int localMax(int[] data){
+		int max;
 		int index;
 		
 		max = data[0];
@@ -289,12 +344,11 @@ public class simpleMath{
 	}
 	
 	public static double getEnergy(short[] dataIn){	
-		double energy = 0;
-		int i = 0;
+		double energy = 0;		
 		for (short d:dataIn){
-			energy += d^2;			
+			energy += Math.pow(d, 2);			
 		}
-		return energy;
+		return Math.sqrt(energy);
 	}
 	
 	/** Calculates mean value of the input data.*/
@@ -455,7 +509,7 @@ public class simpleMath{
 					break;
 				}
 					
-				i += 500; // jump over the burst, continues search for other bursts.
+				i += 3000; // jump over the burst, continues search for other bursts.
 			}
 		}
 		

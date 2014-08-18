@@ -57,6 +57,7 @@ public class WavRecordTest extends Activity {
 	private Calendar cal;
 	double[] data_sub = null;
 	double[] impedance = null;
+	double[] frequency = null;
 	//short[] data_sub = null;
 	double distance;
 	
@@ -117,6 +118,8 @@ public class WavRecordTest extends Activity {
 		short[] plotData = null;
 		short[] noiseData = null;
 		short[] burstData = null;
+		short[] burstRegion = null;
+		short[] noiseExtracted = null;
 		FileInputStream is = null;
 		InputStream noiseTemplate = null;
 		InputStream burstTemplate = null;
@@ -150,8 +153,8 @@ public class WavRecordTest extends Activity {
 		lengthNoise = noiseTemplate.available();
 		lengthBurst = burstTemplate.available();
 		//lengthNoise = noiseTemplate.getChannel().size();
-		Log.d("PLR", "Size is: " + String.valueOf(lengthNoise));
-		Log.d("PLR", "Size is: " + String.valueOf(lengthBurst));
+		Log.d("PLR", "Size of noise is: " + String.valueOf(lengthNoise));
+		Log.d("PLR", "Size of burst is: " + String.valueOf(lengthBurst));
 		bufferNoise = new byte[lengthNoise];		
 		bufferBurst = new byte[lengthBurst];
 		noiseTemplate.read(bufferNoise);	
@@ -169,37 +172,11 @@ public class WavRecordTest extends Activity {
 		burstData = byte2short(bufferNoise);
 		Log.d("PLR", "burstData converted successfully.");
 		// The noise is recognized to be between following indices: 4300 and 22100
-		//plotData = simpleMath.getSubsequent(4300, 22100, plotData);
-		//plotData = simpleMath.xGetNoise(plotData);
-		plotData = simpleMath.getNoise(noiseData, plotData);
+		noiseExtracted = simpleMath.getNoise(noiseData, plotData);
 		Log.d("PLR", "Noise extracted successfully.");
-		//plotData = simpleMath.getBurst(noiseData, plotData);
-		//drawPlot(plotData);
-		//Log.d("PLR","Data plotted.");
 		
-		// Detecting the regions with bursts - there should be no more than eight bursts.
-		//plotData = simpleMath.getBurstRegion(noiseData, plotData);
-		//Log.d("PLR", "Burst region extracted...");
-		indices = simpleMath.getBurstIndices(plotData); // returns burst indices from the data without noise
-		Log.d("PLR", "Burst indices obtained.");
-		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
-		bursts.setText("#Bursts: "+ indices.length);
-		impedance = new double[indices.length];
-		int i = 0;
-		
- 		for (int d : indices) { 			
-			burstData = simpleMath.getSubsequent(d-100, d+400, plotData);
-			//drawPlotClean(burstData);
-			impedance[i] = simpleMath.calcImpedance(burstData, 0.0, distance, 0.0 );
-			Log.d("PLR", "Plot done.");
-			i++;
-		}
-
-
-		
-		
-		data_corr = new double[2*plotData.length];
-		data_corr = simpleMath.correlation_fast(plotData);
+		data_corr = new double[2*noiseExtracted.length];
+		data_corr = simpleMath.correlation_fast(noiseExtracted);
 		Log.d("PLR", "Correlation computed.");
 		//drawPlot(data_corr);
 		data_corr = simpleMath.abs(data_corr);		
@@ -215,11 +192,32 @@ public class WavRecordTest extends Activity {
 		time = (double)(maximum+50)/44100;
 		distance = (time*340/2)*100;
 		
+		// Detecting the regions with bursts - there should be no more than eight bursts.
+		burstRegion = simpleMath.getBurstRegion(noiseData, plotData);
+		Log.d("PLR", "Burst region extracted...");
+		indices = simpleMath.getBurstIndices(burstRegion); // returns burst indices from the data without noise
+		Log.d("PLR", "Burst indices obtained.");
+		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
+		bursts.setText("#Bursts: "+ indices.length);
+		impedance = new double[indices.length];
+		frequency = new double[indices.length];
+		int i = 0;
+		
+ 		for (int d : indices) { 			
+			burstData = simpleMath.getSubsequent(d-100, d+400, burstRegion);
+			//drawPlotClean(burstData);
+			impedance[i] = simpleMath.calcImpedance(burstData, 0.15, distance, 0.0 );
+			Log.d("PLR", "Impedance calculated");
+			frequency[i] = simpleMath.calcFrequency(burstData);
+			Log.d("PLR", "Frequency calculaated");
+			i++;
+		}
+		
 		viz();
-		writeLog(indices.length);
+		writeLog(indices);
 	}	
 	
-	private void writeLog(int bursts){
+	private void writeLog(int[] burstsIndices){
 		String fileLog = null;
 		//fileLog = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
 		if (file_wav == null){
@@ -235,10 +233,12 @@ public class WavRecordTest extends Activity {
 			os = new FileOutputStream(fileLog);
 			writer = new PrintWriter(os);            
     		writer.write("Distance:" + Double.toString(distance) + "\n");
-    		writer.write("Bursts detected:" + Integer.toString(bursts) + "\n");
+    		writer.write("Bursts detected:" + Integer.toString(burstsIndices.length) + "\n");
     		
     		for (int i = 0; i < impedance.length; i++) {
 				writer.write("Impedance calculated:" + Double.toString(impedance[i]) + "\n");
+				writer.write("Frequency calculated:" + Double.toString(frequency[i]) + "\n");
+				writer.write("Burst index number:" + Double.toString(burstsIndices[i]) + "\n");
 			}    		
     		
     		writer.close();        	    		
@@ -578,8 +578,7 @@ public class WavRecordTest extends Activity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					// startPlaying();
-					writeLog(5);
+					startPlaying();					
 				}
 			});
 						
