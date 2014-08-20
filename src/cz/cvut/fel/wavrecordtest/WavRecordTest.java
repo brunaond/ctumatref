@@ -249,9 +249,9 @@ public class WavRecordTest extends Activity {
 	
 	
 	private void viz(){
-		TextView mText = (TextView) findViewById(R.id.status_text_view);
-		//drawPlot(data_sub);		
+		TextView mText = (TextView) findViewById(R.id.status_text_view);			
 		mText.setText("Distance: "+distance+" cm");
+		drawPlot(frequency, impedance);
 	}
 	
 	private byte[] short2byte(short[] sData) {
@@ -492,6 +492,57 @@ public class WavRecordTest extends Activity {
         plot.redraw();
 		
 	}
+	
+	public void drawPlot(double[] xData, double[] yData) {
+		XYPlot plot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
+		Number[] series1Numbers, domainNumbers;
+		if (xData.length != yData.length){
+			return;
+		}
+		series1Numbers = new Number[xData.length];
+		domainNumbers = new Number[yData.length];
+		
+        // Create a couple arrays of y-values to plot:
+		for (int i = 0; i< xData.length; i++) {
+			series1Numbers[i]=yData[i];
+			domainNumbers[i]=xData[i];			
+		}
+        //Number[] series1Numbers = {1, 8, 5, 2, 7, 4};
+        //Number[] series2Numbers = {4, 6, 3, 8, 2, 10};                
+
+        // Turn the above arrays into XYSeries':
+        XYSeries series1 = new SimpleXYSeries(
+        		Arrays.asList(domainNumbers),          // SimpleXYSeries takes a List so turn our array into a List
+                Arrays.asList(series1Numbers), // Y_VALS_ONLY means use the element index as the x value
+                "Series1");                             // Set the display title of the series
+ 
+        // same as above
+        //XYSeries series2 = new SimpleXYSeries(Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series2");
+ 
+        // Create a formatter to use for drawing a series using LineAndPointRenderer
+        // and configure it from xml:
+        LineAndPointFormatter series1Format = new LineAndPointFormatter();     
+        series1Format.setPointLabelFormatter(new PointLabelFormatter());
+        series1Format.configure(getApplicationContext(),
+                R.xml.line_formatter_1);
+ 
+        // add a new series' to the xyplot:
+        plot.addSeries(series1, series1Format);
+ 
+        // same as above:
+        /*LineAndPointFormatter series2Format = new LineAndPointFormatter();
+        series2Format.setPointLabelFormatter(new PointLabelFormatter());
+        series2Format.configure(getApplicationContext(),
+                R.xml.line_formatter_2);
+        plot.addSeries(series2, series2Format);
+*/
+ 
+        // reduce the number of range labels
+        plot.setTicksPerRangeLabel(3);
+        plot.getGraphWidget().setDomainLabelOrientation(-45);
+        plot.redraw();
+		
+	}	
 	
 	public void drawPlotClean(short[] plotData) {
 		XYPlot plot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
