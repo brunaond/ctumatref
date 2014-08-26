@@ -527,7 +527,7 @@ public class WavRecordTest extends Activity {
                 R.xml.line_formatter_1);
  
         // add a new series' to the xyplot:
-        plot.addSeries(series1, series1Format);
+        plot.addSeries(series1, series1Format);        
  
         // same as above:
         /*LineAndPointFormatter series2Format = new LineAndPointFormatter();
