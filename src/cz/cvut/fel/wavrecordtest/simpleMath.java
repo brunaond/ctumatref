@@ -12,6 +12,7 @@ import android.util.Log;
 
 public class simpleMath{
 	final static double PI = 3.14;
+	final static int SAMPLING_FREQ = 44100;
 	
 	public static double[] correlation(short[] data_in) {
 		  int length;
@@ -66,9 +67,15 @@ public class simpleMath{
 		int[] indices = new int[inBurst.length];
 		int k =0;
 		int[] temp, tempDiff;
-		int max;
+		int max, min;
+		double mean;
 		
-		for (int i = 1; i < inBurst.length; i++) {
+		
+		/* 		 
+		 * Check for crossing zero and if it does cross zero, record the index to a new field.
+		 */
+		
+		for (int i = 1; i < 200; i++) {
 			if ((inBurst[i] > 0) && (inBurst[i-1]) < 0) {
 				indices[k] = i;
 				k++;
@@ -84,9 +91,18 @@ public class simpleMath{
 			temp[i] = indices[i];
 		}
 		
-		tempDiff = diff(temp);
-		max = localMax(tempDiff);
-		freq = 44100/tempDiff[max];
+		if (inBurst.length > 3) {
+			tempDiff = diff(temp); // calculates the difference between all points in the array
+			freq = SAMPLING_FREQ/getMean(tempDiff);
+			//max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
+			//min = localMin(tempDiff); // finds the smallest difference in the array
+			// freq = SAMPLING_FREQ/tempDiff[max]; // calculating the frequency based on the number of samples			
+		} else {
+			tempDiff = diff(temp); // calculates the difference between all points in the array
+			max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
+			freq = SAMPLING_FREQ/tempDiff[max]; // calculating the frequency based on the number of samples			
+		}
+
 		return freq;
 	}
 	
@@ -107,6 +123,24 @@ public class simpleMath{
 		index = localMax(corr);
 		noise = getSubsequent(index, index+25000, inData);
 		return noise;
+	}
+	
+	// This is not full x-correlation.
+	public static int getNoiseStartIndex(short[] inTemplate, short[] inData ) {		
+		double[] corr = null;
+		int index;
+		short[] noise = null;		
+		
+		corr = new double[inData.length];
+		
+		for (int i = 0; i < corr.length-inTemplate.length; i++) {			
+			for (int j = 0; j < inTemplate.length; j++) {
+				corr[i] += inData[i+j] * inTemplate[j];				
+			}
+		}
+		
+		index = localMax(corr);
+		return index;
 		
 	}
 	
@@ -324,6 +358,21 @@ public class simpleMath{
 		}
 		return index;		
 	}
+	
+	public static int localMin(int[] data){
+		int min;
+		int index;
+		
+		min = data[0];
+		index = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (min<data[i]) {
+				min = data[i];
+				index = i;
+			} 
+		}
+		return index;		
+	}	
 	
 	public static double[] getSubsequent(int start, int end, double[] data) {
 		double[] output;

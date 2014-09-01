@@ -58,6 +58,8 @@ public class WavRecordTest extends Activity {
 	double[] data_sub = null;
 	double[] impedance = null;
 	double[] frequency = null;
+	int noiseStart;
+	final int NOISE_CUTOFF = 12000;
 	//short[] data_sub = null;
 	double distance;
 	
@@ -172,7 +174,9 @@ public class WavRecordTest extends Activity {
 		burstData = byte2short(bufferNoise);
 		Log.d("PLR", "burstData converted successfully.");
 		// The noise is recognized to be between following indices: 4300 and 22100
-		noiseExtracted = simpleMath.getNoise(noiseData, plotData);
+		//noiseExtracted = simpleMath.getNoiseStart(noiseData, plotData);		
+		noiseStart = simpleMath.getNoiseStartIndex(noiseData, plotData);
+		noiseExtracted = simpleMath.getSubsequent(noiseStart, noiseStart+NOISE_CUTOFF, plotData);
 		Log.d("PLR", "Noise extracted successfully.");
 		
 		data_corr = new double[2*noiseExtracted.length];
@@ -192,7 +196,7 @@ public class WavRecordTest extends Activity {
 		time = (double)(maximum+50)/44100;
 		distance = (time*340/2)*100;
 		
-		// Detecting the regions with bursts - there should be no more than eight bursts.
+		// Detecting the regions with bursts - there should be no more than as many bursts as in the test file 
 		burstRegion = simpleMath.getBurstRegion(noiseData, plotData);
 		Log.d("PLR", "Burst region extracted...");
 		indices = simpleMath.getBurstIndices(burstRegion); // returns burst indices from the data without noise
@@ -204,7 +208,8 @@ public class WavRecordTest extends Activity {
 		int i = 0;
 		
  		for (int d : indices) { 			
-			burstData = simpleMath.getSubsequent(d-100, d+400, burstRegion);
+ 			// It is expected that the burst length is 4ms resulting in 200 samples. Allowing twice the size for safe detection.
+			burstData = simpleMath.getSubsequent(d, d+400, burstRegion);
 			//drawPlotClean(burstData);
 			impedance[i] = simpleMath.calcImpedance(burstData, 0.15, distance, 0.0 );
 			Log.d("PLR", "Impedance calculated");
@@ -234,11 +239,16 @@ public class WavRecordTest extends Activity {
 			writer = new PrintWriter(os);            
     		writer.write("Distance:" + Double.toString(distance) + "\n");
     		writer.write("Bursts detected:" + Integer.toString(burstsIndices.length) + "\n");
-    		
+    		writer.write("Impedance calculated at region from index d to d+200 samples\n");
+    		writer.write("Noise starts at: " + Integer.toString(noiseStart) + "\n");    
+    		writer.write("Noise cutoff is: " + Integer.toString(NOISE_CUTOFF) + "\n\n");    		
+			writer.write("===================================\n");
+			
     		for (int i = 0; i < impedance.length; i++) {
 				writer.write("Impedance calculated:" + Double.toString(impedance[i]) + "\n");
 				writer.write("Frequency calculated:" + Double.toString(frequency[i]) + "\n");
 				writer.write("Burst index number:" + Double.toString(burstsIndices[i]) + "\n");
+				writer.write("===================================\n");
 			}    		
     		
     		writer.close();        	    		
