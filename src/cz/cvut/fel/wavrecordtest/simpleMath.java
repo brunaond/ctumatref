@@ -75,7 +75,7 @@ public class simpleMath{
 		 * Check for crossing zero and if it does cross zero, record the index to a new field.
 		 */
 		
-		for (int i = 1; i < 200; i++) {
+		for (int i = 1; i < inBurst.length; i++) {
 			if ((inBurst[i] > 0) && (inBurst[i-1]) < 0) {
 				indices[k] = i;
 				k++;
@@ -91,7 +91,9 @@ public class simpleMath{
 			temp[i] = indices[i];
 		}
 		
-		if (inBurst.length > 3) {
+		Log.d("PLR", "Freq - k: " + Integer.toString(k));
+		
+		if (k > 300) {
 			tempDiff = diff(temp); // calculates the difference between all points in the array
 			freq = SAMPLING_FREQ/getMean(tempDiff);
 			//max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
@@ -158,7 +160,7 @@ public class simpleMath{
 		}
 		
 		index = localMax(corr);
-		burstRegion = getSubsequent(index+25000, inData.length-1, inData);
+		burstRegion = getSubsequent(index+12000, inData.length-1, inData);
 		return burstRegion;
 		
 	}

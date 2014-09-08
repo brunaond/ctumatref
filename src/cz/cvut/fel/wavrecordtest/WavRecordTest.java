@@ -178,6 +178,12 @@ public class WavRecordTest extends Activity {
 		noiseStart = simpleMath.getNoiseStartIndex(noiseData, plotData);
 		noiseExtracted = simpleMath.getSubsequent(noiseStart, noiseStart+NOISE_CUTOFF, plotData);
 		Log.d("PLR", "Noise extracted successfully.");
+		// Detecting the regions with bursts - there should be no more than as many bursts as in the test file 
+		// burstRegion = simpleMath.getBurstRegion(noiseData, plotData);
+		burstRegion = simpleMath.getSubsequent(noiseStart+NOISE_CUTOFF, plotData.length-1, plotData);
+		Log.d("PLR", "Burst region extracted...");
+		indices = simpleMath.getBurstIndices(burstRegion); // returns burst indices from the data without noise
+		Log.d("PLR", "Burst indices obtained.");
 		
 		data_corr = new double[2*noiseExtracted.length];
 		data_corr = simpleMath.correlation_fast(noiseExtracted);
@@ -193,14 +199,9 @@ public class WavRecordTest extends Activity {
 		peak = simpleMath.localMax(data_corr_butter);
 		data_sub = simpleMath.getSubsequent(peak+50, peak+140, data_corr_butter);		
 		maximum = simpleMath.localMax(data_sub);
-		time = (double)(maximum+50)/44100;
+		time = (double)(maximum+50)/RECORDER_SAMPLERATE;
 		distance = (time*340/2)*100;
 		
-		// Detecting the regions with bursts - there should be no more than as many bursts as in the test file 
-		burstRegion = simpleMath.getBurstRegion(noiseData, plotData);
-		Log.d("PLR", "Burst region extracted...");
-		indices = simpleMath.getBurstIndices(burstRegion); // returns burst indices from the data without noise
-		Log.d("PLR", "Burst indices obtained.");
 		TextView bursts = (TextView) findViewById(R.id.busrsts_detected_text_view);
 		bursts.setText("#Bursts: "+ indices.length);
 		impedance = new double[indices.length];
@@ -210,11 +211,13 @@ public class WavRecordTest extends Activity {
  		for (int d : indices) { 			
  			// It is expected that the burst length is 4ms resulting in 200 samples. Allowing twice the size for safe detection.
 			burstData = simpleMath.getSubsequent(d, d+400, burstRegion);
-			//drawPlotClean(burstData);
+			
+			// drawPlotClean(burstData);
+			
 			impedance[i] = simpleMath.calcImpedance(burstData, 0.15, distance, 0.0 );
 			Log.d("PLR", "Impedance calculated");
-			frequency[i] = simpleMath.calcFrequency(burstData);
-			Log.d("PLR", "Frequency calculaated");
+			frequency[i] = simpleMath.calcFrequency(simpleMath.getSubsequent(d, d+200, burstRegion));
+			Log.d("PLR", "Frequency calculated");
 			i++;
 		}
 		
