@@ -216,7 +216,7 @@ public class WavRecordTest extends Activity {
 			
 			impedance[i] = simpleMath.calcImpedance(burstData, 0.15, distance, 0.0 );
 			Log.d("PLR", "Impedance calculated");
-			frequency[i] = simpleMath.calcFrequency(simpleMath.getSubsequent(d, d+200, burstRegion));
+			frequency[i] = simpleMath.calcFrequency(simpleMath.getSubsequent(d, d+197, burstRegion));
 			Log.d("PLR", "Frequency calculated");
 			i++;
 		}

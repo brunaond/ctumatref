@@ -93,16 +93,19 @@ public class simpleMath{
 		
 		Log.d("PLR", "Freq - k: " + Integer.toString(k));
 		
-		if (k > 300) {
+		if (k > 500) {
 			tempDiff = diff(temp); // calculates the difference between all points in the array
 			freq = SAMPLING_FREQ/getMean(tempDiff);
-			//max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
-			//min = localMin(tempDiff); // finds the smallest difference in the array
+			// max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
+			// min = localMin(tempDiff); // finds the smallest difference in the array
 			// freq = SAMPLING_FREQ/tempDiff[max]; // calculating the frequency based on the number of samples			
-		} else {
+		} else if(k > 1 && k < 500) {
 			tempDiff = diff(temp); // calculates the difference between all points in the array
 			max = localMax(tempDiff); // finds the greatest difference in the array which is respective to the greatest frequency
 			freq = SAMPLING_FREQ/tempDiff[max]; // calculating the frequency based on the number of samples			
+		} else {
+			// in case only one crossing is detected the most likely frequency is returned
+			freq = SAMPLING_FREQ/200;
 		}
 
 		return freq;
