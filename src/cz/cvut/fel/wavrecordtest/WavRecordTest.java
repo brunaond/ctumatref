@@ -23,6 +23,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -254,7 +255,9 @@ public class WavRecordTest extends Activity {
 				writer.write("===================================\n");
 			}    		
     		
-    		writer.close();        	    		
+    		writer.close();
+    		MediaScannerConnection.scanFile(this, new String[] {fileLog}, null, null);     		
+    		
         } catch (IOException ex) {
         	ex.printStackTrace();
         }
@@ -362,6 +365,7 @@ public class WavRecordTest extends Activity {
 		os.write(header);
 		os.write(buffer);
 		os.close();
+		MediaScannerConnection.scanFile(this, new String[] {file_wav, filePath}, null, null);
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();
 		} catch(IOException e) {
