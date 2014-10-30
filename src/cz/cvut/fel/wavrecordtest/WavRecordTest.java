@@ -640,6 +640,7 @@ public class WavRecordTest extends Activity {
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.layout);
+			System.out.println("Wav");
 			Button mPlay = (Button) findViewById(R.id.play_button);
 			mPlay.setOnClickListener(new OnClickListener() {
 				

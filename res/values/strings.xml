@@ -9,5 +9,7 @@
     <string name="plot">Plot</string>
     <string name="status_view">Press the rec and play button to record.</string>
     <string name="nburst">#Bursts: N/A</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
