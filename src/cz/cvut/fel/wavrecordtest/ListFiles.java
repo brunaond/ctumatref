@@ -17,7 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class ListFiles extends ListActivity {
-
+	static String logFiles[];
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +44,7 @@ public class ListFiles extends ListActivity {
 		
 		Log.d("PLR", Integer.toString(k));
 		
-		String logFiles[] = new String[k];
+		 logFiles = new String[k];
 					
 		for(int i=0; i < k; i++) {
 			logFiles[i] = fileNames[i];
@@ -57,20 +58,6 @@ public class ListFiles extends ListActivity {
 		Log.d("PLR", "New Intent List.");
 		Log.d("Files", "Size: "+ file.length);
 		
-
-		/*
-		 * String path = Environment.getExternalStorageDirectory().toString()+"/Pictures";
-Log.d("Files", "Path: " + path);
-File f = new File(path);        
-File file[] = f.listFiles();
-Log.d("Files", "Size: "+ file.length);
-for (int i=0; i < file.length; i++)
-{
-    Log.d("Files", "FileName:" + file[i].getName());
-}
-		 */
-		
-		//setContentView(R.layout.activity_list_files);
 	}
 	
 	@Override

@@ -13,5 +13,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_list_files">ListFiles</string>
     <string name="title_activity_run_main">RunMainActivity</string>
+    <string name="measure_desc">Measurement button for execution.</string>
+    <string name="wait_desc">State of measurement.</string>
+    <string name="done_desc">Mesurement successfuly finished.</string>
 
 </resources>

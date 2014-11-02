@@ -23,6 +23,7 @@ public class MainActivity extends ListActivity {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		Intent intent;
+		
 		if(position == 0){
 			intent = new Intent(this, WavRecordTest.class);
 			startActivity(intent);
