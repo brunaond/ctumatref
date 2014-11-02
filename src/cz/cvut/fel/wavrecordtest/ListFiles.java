@@ -1,23 +1,78 @@
 package cz.cvut.fel.wavrecordtest;
 
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends ListActivity {
+public class ListFiles extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	
+		String file_wav;
+		file_wav = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+		
+		File f = new File(file_wav);        		
+		File file[] = f.listFiles();
+		String fileNames[] = new String[file.length];
+				
+		int k = 0;
+		for (int i=0; i < file.length; i++) {
+			String name;
+			name = file[i].getName();
+			if (name.matches("^rec.*wav$")){
+				fileNames[k] = name;
+				k++;				
+			}
+		}
+		
+		
+		
+		Log.d("PLR", Integer.toString(k));
+		
+		String logFiles[] = new String[k];
+					
+		for(int i=0; i < k; i++) {
+			logFiles[i] = fileNames[i];
+		}
+		
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 
-				new String[]{"Measure", "History", "Recent"}));
-	}
+				logFiles));
+		
 
+		
+		Log.d("PLR", "New Intent List.");
+		Log.d("Files", "Size: "+ file.length);
+		
+
+		/*
+		 * String path = Environment.getExternalStorageDirectory().toString()+"/Pictures";
+Log.d("Files", "Path: " + path);
+File f = new File(path);        
+File file[] = f.listFiles();
+Log.d("Files", "Size: "+ file.length);
+for (int i=0; i < file.length; i++)
+{
+    Log.d("Files", "FileName:" + file[i].getName());
+}
+		 */
+		
+		//setContentView(R.layout.activity_list_files);
+	}
+	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
@@ -32,12 +87,12 @@ public class MainActivity extends ListActivity {
 		} else if (position == 2) {
 
 		}
-	}
-	
+	}	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.list_files, menu);
 		return true;
 	}
 

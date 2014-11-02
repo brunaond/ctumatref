@@ -1,24 +1,15 @@
 package cz.cvut.fel.wavrecordtest;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.Calendar;
-import java.math.*;
 
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.PointLabelFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-
+import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaPlayer;
@@ -27,20 +18,18 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.app.Activity;
-import android.content.Context;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.CorrectionInfo;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import cz.cvut.fel.wavrecordtest.R.id;
-import cz.cvut.fel.wavrecordtest.simpleMath;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 
 
 public class WavRecordTest extends Activity {

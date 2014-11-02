@@ -11,5 +11,7 @@
     <string name="nburst">#Bursts: N/A</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_list_files">ListFiles</string>
+    <string name="title_activity_run_main">RunMainActivity</string>
 
 </resources>

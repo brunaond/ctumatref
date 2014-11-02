@@ -1,10 +1,5 @@
 package cz.cvut.fel.wavrecordtest;
 
-import java.util.List;
-
-import javax.xml.transform.Templates;
-
-import android.net.Uri;
 import android.util.Log;
 
 // Energy calculation of reflected wave:
@@ -66,9 +61,8 @@ public class simpleMath{
 		double freq;
 		int[] indices = new int[inBurst.length];
 		int k =0;
+		int max;
 		int[] temp, tempDiff;
-		int max, min;
-		double mean;
 		
 		
 		/* 		 
@@ -134,7 +128,7 @@ public class simpleMath{
 	public static int getNoiseStartIndex(short[] inTemplate, short[] inData ) {		
 		double[] corr = null;
 		int index;
-		short[] noise = null;		
+	
 		
 		corr = new double[inData.length];
 		
