@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+
     <supports-screens android:requiresSmallestWidthDp="320" />
 <!-- The code included in the application tag item android:enabled="false" when this was removed the error disappeared.-->
     <application
@@ -23,13 +24,14 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> 
+
         </activity>
         <activity
             android:name=".WavRecordTest"
             android:label="@string/app_name" >
+           
         </activity>
         <activity
             android:name=".ListFiles"

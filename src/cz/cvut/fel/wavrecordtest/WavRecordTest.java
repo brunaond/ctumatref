@@ -1,5 +1,6 @@
 package cz.cvut.fel.wavrecordtest;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.media.AudioFormat;
@@ -55,7 +57,7 @@ public class WavRecordTest extends Activity {
 	
 	private void startPlaying() {
 		mPlayer = new MediaPlayer();
-		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test);	
+		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.source_4ms_rex);	
 		try {
 			mPlayer.setDataSource(getBaseContext(), path);
 			mPlayer.prepare();
@@ -294,13 +296,9 @@ public class WavRecordTest extends Activity {
 	
 	private void writeAudioDataToFile() {
 	    // Write the output audio in byte
-		cal = Calendar.getInstance();
-		int sec = cal.get(Calendar.SECOND);
-		int min = cal.get(Calendar.MINUTE);
-		int h = cal.get(Calendar.HOUR_OF_DAY);
-		int d = cal.get(Calendar.DAY_OF_MONTH);
-		int m = cal.get(Calendar.MONTH)+1; // Months are counted from 0 = January.
-		int y = cal.get(Calendar.YEAR);
+		
+		String timeStamp = String.format(Locale.ENGLISH,"%1$tY-%<tm-%<td-%<tH%<tM%<tS", Calendar.getInstance());
+		Log.d("PLR", "Generated time: "+timeStamp);
 		byte[] header=null;
 		Long length;
 		byte[] buffer;
@@ -343,14 +341,15 @@ public class WavRecordTest extends Activity {
 	    }	   
 		try {
 		//file_wav = Environment.getExternalStorageDirectory().getAbsolutePath();
-		file_wav = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
-        file_wav += "/rec_"+y+"-"+m+"-"+d+"-"+h+min+sec+".wav";		
+		file_wav = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();		
+        file_wav += "/rec_"+timeStamp+".wav";		
         os = new FileOutputStream(file_wav);
 		is = new FileInputStream(filePath);
 		length = is.getChannel().size();
 		buffer = new byte[length.intValue()];						
 		is.read(buffer);		
 		header = assembleHeader(length);
+		File f = new File(file_wav);
 		os.write(header);
 		os.write(buffer);
 		os.close();
@@ -435,10 +434,15 @@ public class WavRecordTest extends Activity {
 	}
 	
 	private void playAndRecord(){
-	    mRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-	            RECORDER_SAMPLERATE, RECORDER_CHANNELS,
-	            RECORDER_AUDIO_ENCODING, AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,
-			            RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING));	    
+	    mRecord = new AudioRecord(	MediaRecorder.AudioSource.VOICE_RECOGNITION,
+	            					RECORDER_SAMPLERATE, 
+	            					RECORDER_CHANNELS,
+	            					RECORDER_AUDIO_ENCODING, 
+	            					AudioRecord.getMinBufferSize(	RECORDER_SAMPLERATE,
+	            													RECORDER_CHANNELS, 
+	            													RECORDER_AUDIO_ENCODING)
+								);
+	    
 	    if (mRecord.getState() == AudioRecord.STATE_UNINITIALIZED) {	    	
 			Log.d("PLR", "Player not yet initialized");
 		} else {
