@@ -1,6 +1,9 @@
 package cz.cvut.fel.wavrecordtest;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.security.PublicKey;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -23,40 +26,37 @@ public class ListFiles extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	
-		String file_wav;
-		file_wav = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+		//String file_wav;
+		String extState = Environment.getExternalStorageState();
+		File f;
 		
-		File f = new File(file_wav);        		
-		File file[] = f.listFiles();
-		String fileNames[] = new String[file.length];
-				
-		int k = 0;
-		for (int i=0; i < file.length; i++) {
-			String name;
-			name = file[i].getName();
-			if (name.matches("^rec.*wav$")){
-				fileNames[k] = name;
-				k++;				
-			}
+		if(extState.equals(Environment.MEDIA_MOUNTED)){
+			f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+		} else {
+			Log.d("PLR", "Media not mounted");
+			f = null;
 		}
 		
-		
-		
-		Log.d("PLR", Integer.toString(k));
-		
-		 logFiles = new String[k];
-					
-		for(int i=0; i < k; i++) {
-			logFiles[i] = fileNames[i];
-		}
-		
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 
-				logFiles));
 		
 
 		
+		FilenameFilter filterWav = new FilenameFilter() {		
+			@Override
+			public boolean accept(File dir, String fileName) {
+				if (fileName.matches("^rec.*wav$")) {
+					return true;
+				} else {
+					return false;					
+				}
+			}};
+			
+		logFiles = f.list(filterWav);
+
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 
+				logFiles));		
+		
 		Log.d("PLR", "New Intent List.");
-		Log.d("Files", "Size: "+ file.length);
+		Log.d("Files", "Size: "+ logFiles.length);
 		
 	}
 	
@@ -65,15 +65,10 @@ public class ListFiles extends ListActivity {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		Intent intent;
-		if(position == 0){
-			intent = new Intent(this, WavRecordTest.class);
-			startActivity(intent);
-		} else if (position == 1) {
-			intent = new Intent(this, ListFiles.class);
-			startActivity(intent);			
-		} else if (position == 2) {
-
-		}
+		Log.d("PLR","Soubor " + logFiles[position]);
+		intent = new Intent(this, WavRecordTest.class);
+		intent.putExtra("cz.cvut.fel.wavrecordtest.logFiles", logFiles[position]);
+		startActivity(intent);
 	}	
 
 	@Override

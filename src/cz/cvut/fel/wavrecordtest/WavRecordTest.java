@@ -631,10 +631,16 @@ public class WavRecordTest extends Activity {
 
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
+			super.onCreate(savedInstanceState);			
 			setContentView(R.layout.layout);
 			System.out.println("Wav");
 			Button mPlay = (Button) findViewById(R.id.play_button);
+			
+			if (getIntent().getExtras() != null){
+				file_wav = (String) getIntent().getExtras().get("cz.cvut.fel.wavrecordtest.logFiles");
+				Log.d("PLR", "Opened from file " + file_wav);
+			}
+			
 			mPlay.setOnClickListener(new OnClickListener() {
 				
 				@Override
