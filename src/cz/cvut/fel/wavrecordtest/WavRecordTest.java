@@ -55,9 +55,9 @@ public class WavRecordTest extends Activity {
 	//short[] data_sub = null;
 	double distance;
 	
-	private void startPlaying() {
+	public void startPlaying(View v) {
 		mPlayer = new MediaPlayer();
-		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.source_4ms_rex);	
+		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test);	
 		try {
 			mPlayer.setDataSource(getBaseContext(), path);
 			mPlayer.prepare();
@@ -101,7 +101,7 @@ public class WavRecordTest extends Activity {
 	}
 
 	
-	private void plotData() {
+	public void plotData(View v) {
 		Long length = null;
 		int lengthNoise;
 		int lengthBurst;
@@ -433,7 +433,7 @@ public class WavRecordTest extends Activity {
 	    return bytes;
 	}
 	
-	private void playAndRecord(){
+	public void playAndRecord(View v){
 	    mRecord = new AudioRecord(	MediaRecorder.AudioSource.VOICE_RECOGNITION,
 	            					RECORDER_SAMPLERATE, 
 	            					RECORDER_CHANNELS,
@@ -444,12 +444,14 @@ public class WavRecordTest extends Activity {
 								);
 	    
 	    if (mRecord.getState() == AudioRecord.STATE_UNINITIALIZED) {	    	
-			Log.d("PLR", "Player not yet initialized");
+			Log.d("PLR", "Recorder not yet initialized");
+			Log.d("PLR", "State:" + mRecord.getState());
 		} else {
-			Log.d("PLR", "Player successfully initialized");
+			Log.d("PLR", "Recorder successfully initialized");
+			Log.d("PLR", "State:" + mRecord.getState());
 		}
 	    mRecord.startRecording();	   
-		startPlaying();
+		startPlaying(this.getCurrentFocus());
 		startRecording();						
 	}
 	
@@ -624,56 +626,28 @@ public class WavRecordTest extends Activity {
 		
 	}		
 	
-	public void writeTest(){
-		
-	}
-
+	// TODO
+	// Check the file_wav variable loading from listView
+	// Change assigning onClickListeners from onCreate to layout file
+	// Create a new layout for calculating the output from already recorded data
 
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);			
-			setContentView(R.layout.layout);
+			
 			System.out.println("Wav");
-			Button mPlay = (Button) findViewById(R.id.play_button);
+//			Button mPlay = (Button) findViewById(R.id.play_button);
 			
 			if (getIntent().getExtras() != null){
-				file_wav = (String) getIntent().getExtras().get("cz.cvut.fel.wavrecordtest.logFiles");
-				Log.d("PLR", "Opened from file " + file_wav);
+				setContentView(R.layout.post_processing_layout);
+				filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+				filePath += "/" + (String) getIntent().getExtras().get("cz.cvut.fel.wavrecordtest.logFiles");
+				Log.d("PLR", "Opened from file " + filePath);				
+			} else {
+				setContentView(R.layout.layout);
+				Log.d("PLR", "Opened from main menu");
 			}
 			
-			mPlay.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					startPlaying();					
-				}
-			});
-						
-			Button mPlayAndRec = (Button) findViewById(R.id.play_and_record_button);
-			mPlayAndRec.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					playAndRecord();
-				}
-			});
-			
-			Button mPlot = (Button) findViewById(R.id.plot_button);	
-			mPlot.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub					
-					plotData();
-					/*
-					short[] data_in = {0, 0, 0, 0, 1, 1, 1, 0, 0, 0};
-					double[] plot_data = new double[data_in.length];
-					plot_data = simpleMath.correlation_fast(data_in);					
-					drawPlot(plot_data);*/
-				}
-			});
 			distance = 0;
 		}	
 				

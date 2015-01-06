@@ -13,24 +13,12 @@
     <LinearLayout android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-               
-	   <Button android:id="@+id/play_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:text="@string/play"
-	        android:onClick="startPlaying" />
-	        
-	   <Button android:id="@+id/plot_button"
+               	       
+	   <Button android:id="@+id/calculate_button"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
-	       android:text="@string/plot"
-	       android:onClick="plotData" />
-	   
-	   <Button android:id="@+id/play_and_record_button"
-	       android:layout_width="wrap_content"
-	       android:layout_height="wrap_content"
-	       android:text="@string/play_and_record"
-	       android:onClick="playAndRecord" />
+	       android:text="@string/calculate"
+	       android:onClick="plotData" />	  
 	    
 	    <TextView android:id="@+id/status_text_view"
 	        android:layout_width="wrap_content"

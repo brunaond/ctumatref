@@ -17,17 +17,20 @@
 	   <Button android:id="@+id/play_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" 
-	        android:text="@string/play" />
+	        android:text="@string/play"
+	        android:onClick="startPlaying" />
 	        
 	   <Button android:id="@+id/plot_button"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
-	       android:text="@string/plot"/>
+	       android:text="@string/plot"
+	       android:onClick="plotData" />
 	   
 	   <Button android:id="@+id/play_and_record_button"
 	       android:layout_width="wrap_content"
 	       android:layout_height="wrap_content"
-	       android:text="@string/play_and_record"/>
+	       android:text="@string/play_and_record"
+	       android:onClick="playAndRecord" />
 	    
 	    <TextView android:id="@+id/status_text_view"
 	        android:layout_width="wrap_content"
