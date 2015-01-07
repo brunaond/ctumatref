@@ -36,10 +36,7 @@ public class ListFiles extends ListActivity {
 			Log.d("PLR", "Media not mounted");
 			f = null;
 		}
-		
-		
-
-		
+						
 		FilenameFilter filterWav = new FilenameFilter() {		
 			@Override
 			public boolean accept(File dir, String fileName) {

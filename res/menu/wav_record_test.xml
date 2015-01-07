@@ -5,9 +5,17 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/pokus"
+    
+    <item 
+        android:id="@+id/action_default_sample" 
+        android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/test_string" />
-
+        android:title="@string/action_use_default_sample" />
+    
+    <item
+        android:id="@+id/action_select_sample"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_select_sample" />
+            
 </menu>

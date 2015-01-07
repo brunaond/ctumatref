@@ -2,18 +2,25 @@
 <resources>
 
     <string name="app_name">WavRecordTest</string>
+    
     <string name="action_settings">Settings</string>
-    <string name="test_string">Pokus</string>
+    <string name="action_select_sample">Select sample</string>
+    <string name="action_use_default_sample">Default sample</string>
+    <string name="action_audio_setting">Audio settings</string>
+       
     <string name="play_and_record">Play and record</string>
     <string name="play">Play</string>
     <string name="plot">Plot</string>
     <string name="calculate">Calculate</string>
     <string name="status_view">Press the rec and play button to record.</string>
     <string name="nburst">#Bursts: N/A</string>
-    <string name="title_activity_main">Matest</string>
+    
+    <string name="title_activity_main">Mates</string>
+    
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_list_files">ListFiles</string>
     <string name="title_activity_run_main">RunMainActivity</string>
+    
     <string name="measure_desc">Measurement button for execution.</string>
     <string name="wait_desc">State of measurement.</string>
     <string name="done_desc">Mesurement successfuly finished.</string>

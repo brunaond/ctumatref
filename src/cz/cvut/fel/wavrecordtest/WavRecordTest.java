@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -57,12 +58,12 @@ public class WavRecordTest extends Activity {
 	
 	public void startPlaying(View v) {
 		mPlayer = new MediaPlayer();
-		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test);	
+		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test);
 		try {
 			mPlayer.setDataSource(getBaseContext(), path);
 			mPlayer.prepare();
 			mPlayer.start();
-		} 
+		} 		
 		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -627,9 +628,9 @@ public class WavRecordTest extends Activity {
 	}		
 	
 	// TODO
-	// Check the file_wav variable loading from listView
-	// Change assigning onClickListeners from onCreate to layout file
-	// Create a new layout for calculating the output from already recorded data
+	// [DONE]Check the file_wav variable loading from listView
+	// [DONE]Change assigning onClickListeners from onCreate to layout file
+	// [DONE]Create a new layout for calculating the output from already recorded data
 
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
@@ -665,6 +666,12 @@ public class WavRecordTest extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.wav_record_test, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onOptionsItemSelected(item);
 	}
 	
 }
