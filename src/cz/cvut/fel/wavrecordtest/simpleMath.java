@@ -8,7 +8,12 @@ import android.util.Log;
 public class simpleMath{
 	final static double PI = 3.14;
 	final static int SAMPLING_FREQ = 44100;
-	
+	public static final double[] alpha = {2.2877,1.6509,1.7962,1.1580,0.9992,1.0110,1.0097,0.9822,0.8065,0.8297,0.8215,0.8206,0.8687,0.9528,1.0751,0.5372};
+	public static final double[] coeffA = {55.0833,12.4888,54.0666,10.4352,3.0666,3.0303,2.9293,2.7145,1.7792,2.0170,1.9585,2.0740,2.1382,2.2571,3.5222,0.1455};
+	/* Calculation with equivalent number of samples without period detection.
+  alpha = {2.9207, 2.1048, 1.7469, 1.5553, 1.5935, 1.6152, 1.6207, 1.5585, 1.3539, 1.3933, 1.3827, 1.3692, 1.4519, 1.5909, 1.7042, 1.6864}
+  coeffA = {1706.9, 159.1, 59.5, 35.5, 38.8, 39.7, 39.6, 33.3, 18.1, 21.6, 20.9, 21.0, 25.0, 32.7, 52.1, 13.5},
+  */
 	public static double[] correlation(short[] data_in) {
 		  int length;
 		  length = data_in.length;

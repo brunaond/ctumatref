@@ -24,8 +24,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.androidplot.xy.LineAndPointFormatter;
@@ -46,8 +44,7 @@ public class WavRecordTest extends Activity {
 	int BufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
 	int BytesPerElement = 2; // 2 bytes in 16bit format
 	private static String filePath = null;
-	private static String file_wav = null;
-	private Calendar cal;
+	private static String file_wav = null;	
 	double[] data_sub = null;
 	double[] impedance = null;
 	double[] frequency = null;
@@ -59,7 +56,7 @@ public class WavRecordTest extends Activity {
 	public void startPlaying(View v) {
 		mPlayer = new MediaPlayer();
 		Uri path = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test);
-		try {
+		try {			
 			mPlayer.setDataSource(getBaseContext(), path);
 			mPlayer.prepare();
 			mPlayer.start();
