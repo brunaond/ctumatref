@@ -197,18 +197,25 @@ public class WavRecordTest extends Activity {
 		impedance = new double[indices.length];
 		frequency = new double[indices.length];
 		int i = 0;
+		int k = 0;
+		if (indices.length == 15) {
+			 k = 1;
+		}
 		
  		for (int d : indices) { 			
  			// It is expected that the burst length is 4ms resulting in 200 samples. Allowing twice the size for safe detection.
 			burstData = simpleMath.getSubsequent(d, d+400, burstRegion);
 			
 			// drawPlotClean(burstData);
+
 			
-			impedance[i] = simpleMath.calcImpedance(burstData, 0.15, distance, 0.0 );
+			impedance[i] = simpleMath.calcImpedance(burstData, k, 0.15, distance, 0.0 );
 			Log.d("PLR", "Impedance calculated");
-			frequency[i] = simpleMath.calcFrequency(simpleMath.getSubsequent(d, d+197, burstRegion));
+			//frequency[i] = simpleMath.calcFrequency(simpleMath.getSubsequent(d, d+197, burstRegion));
+			frequency[i] = simpleMath.FREQUENCIES[k];
 			Log.d("PLR", "Frequency calculated");
 			i++;
+			k++;
 		}
 		
 		viz();

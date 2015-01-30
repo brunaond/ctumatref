@@ -1,13 +1,7 @@
 package cz.cvut.fel.wavrecordtest;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.security.PublicKey;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
